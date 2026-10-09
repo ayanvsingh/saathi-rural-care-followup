@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saathi — ASHA Follow-Up Tracker</title>
+<style>
+:root{--bg:#F6EEE0;--card:#FFFDF8;--ink:#2A211B;--mute:#7A6C60;--green:#136B50;--mint:#CFEBDD;--line:#EADFCB;--sand:#F3E8D6;
+--esc-bg:#F3D5D8;--esc:#7A2230;--over-bg:#FDDDD8;--over:#B33A2E;--soon-bg:#FBEBC0;--soon:#8A6A14;--ok-bg:#D8F0DF;--ok:#1D6B43}
+*{box-sizing:border-box}
+body{margin:0;background:#E9DFCC;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink)}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+#shell{max-width:430px;min-height:100vh;margin:0 auto;background:var(--bg);position:relative;padding-bottom:92px}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.brand{display:flex;gap:10px;align-items:center}
+.logo{width:40px;height:40px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;font-size:18px}
+.brand b{font-family:Georgia,serif;font-size:18px;display:block}
+.brand small{font-size:10.5px;letter-spacing:.08em;color:var(--mute);text-transform:uppercase}
+.online{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:8px 14px;font-size:13px;font-weight:600;display:flex;gap:8px;align-items:center}
+.online i{width:9px;height:9px;border-radius:50%;background:#1E8A5E}
+main{padding:18px}
+h2{font-size:30px;margin:4px 0 4px}
+.sub{color:var(--mute);font-size:14px;margin:0 0 16px;line-height:1.4}
+.hero{background:var(--green);color:#fff;border-radius:22px;padding:18px;margin-bottom:16px;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px)}
+.hero .top{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.9}
+.hero .top span:last-child{background:rgba(255,255,255,.18);padding:4px 9px;border-radius:8px;font-weight:700}
+.hero h3{font-size:27px;margin:12px 0 14px;font-weight:700}
+.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.counts div{background:rgba(255,255,255,.14);border-radius:14px;padding:10px 12px}
+.counts b{font-family:Georgia,serif;font-size:26px;display:block}
+.counts small{font-size:12px;opacity:.85}
+.digest{background:rgba(255,255,255,.14);border-radius:14px;padding:12px;font-size:13px;line-height:1.45;margin:12px 0}
+.btn{border:0;border-radius:16px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;width:100%;font-family:inherit}
+.btn.light{background:var(--card);color:var(--green)}
+.btn.solid{background:var(--green);color:#fff}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.sm{width:auto;padding:10px 16px;font-size:14px;border-radius:14px}
+.search{width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;font-size:15px;margin-bottom:12px;font-family:inherit}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:6px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:22px;padding:9px 15px;font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer;font-family:inherit;color:var(--ink)}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+.prow{display:flex;gap:12px;align-items:center}
+.av{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;font-size:18px;flex:none}
+.pinfo{flex:1;min-width:0}
+.pinfo b{font-size:15px;display:block}
+.pinfo span{font-size:12.5px;color:var(--mute);display:block;margin-top:2px}
+.pinfo em{font-style:normal;font-weight:700}
+.badge{font-size:12px;font-weight:700;padding:5px 10px;border-radius:12px;white-space:nowrap}
+.esc{background:var(--esc-bg);color:var(--esc)}.over{background:var(--over-bg);color:var(--over)}
+.soon{background:var(--soon-bg);color:var(--soon)}.ok{background:var(--ok-bg);color:var(--ok)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:5px;margin-bottom:14px}
+.tab{border:0;background:none;border-radius:16px;padding:12px;font-size:15px;font-weight:700;color:var(--mute);cursor:pointer;font-family:inherit}
+.tab.on{background:var(--green);color:#fff}
+.lbl{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute);font-weight:700;margin-bottom:8px}
+.msg{background:var(--sand);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.5;margin:8px 0}
+.meta{font-size:12px;color:var(--mute)}
+.split{display:flex;gap:10px;margin-top:12px}
+.alert{background:var(--esc-bg);color:var(--esc);border-radius:16px;padding:14px;margin-bottom:14px}
+.alert b{display:block;font-size:15px}.alert span{font-size:13px;opacity:.85;line-height:1.4;display:block;margin-top:3px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.qhead b{font-size:15px}
+.tag{font-size:12px;font-weight:700;padding:4px 10px;border-radius:10px}
+.tag.q{background:var(--soon-bg);color:var(--soon)}.tag.d{background:var(--ok-bg);color:var(--ok)}
+.qfoot{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.acard h3{margin:0;font-size:18px}
+.acard .rate{font-family:Georgia,serif;font-size:28px;font-weight:700;color:var(--green);text-align:right;line-height:1}
+.acard .rate small{display:block;font-family:system-ui,sans-serif;font-size:11px;font-weight:400;color:var(--mute);margin-top:3px}
+.bar{height:7px;background:var(--sand);border-radius:6px;margin:10px 0 12px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);border-radius:6px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.stats div{border-radius:14px;padding:9px 4px;text-align:center}
+.stats b{font-family:Georgia,serif;font-size:21px;display:block}.stats small{font-size:11.5px;font-weight:600}
+label.f{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute);font-weight:700;margin:14px 0 6px}
+.in{width:100%;background:var(--sand);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:15px;font-family:inherit;color:var(--ink)}
+.opts{display:grid;gap:8px}
+.opt{border:0;background:var(--sand);border-radius:14px;padding:13px 6px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--ink)}
+.opt.on{background:var(--green);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.consent{display:flex;gap:10px;align-items:flex-start;background:var(--sand);border-radius:14px;padding:12px;margin:16px 0;font-size:13.5px;line-height:1.4}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 8px 12px;gap:4px}
+nav button{border:0;background:none;border-radius:16px;padding:8px 0;font-size:12px;font-weight:600;color:var(--mute);cursor:pointer;font-family:inherit;position:relative;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button.on{background:var(--mint);color:var(--green)}
+nav .dot{position:absolute;top:3px;left:calc(50% + 5px);background:#C0392B;color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:grid;place-items:center}
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:14px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:340px;text-align:center}
+#toast.show{opacity:1}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #2D8F6F;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="shell">
+  <header>
+    <div class="brand"><div class="logo">S</div><div><b>Saathi</b><small>Laxmi Devi · ASHA</small></div></div>
+    <div class="online"><i></i>Online</div>
+  </header>
+  <main id="app"></main>
+  <nav id="nav"></nav>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+const PHC = "Wardha Block PHC", ASHA = "Laxmi Devi";
+const DAY = 86400000, today = new Date();
+// off = days overdue (positive) or days until due (negative)
+const patients = [
+  {n:"Ganesh Patil",v:"Barwaha",c:"Hypertension",bp:"182/110",off:12,ph:"+91 99887 41200",ch:"SMS",consent:true},
+  {n:"Sunita Devi",v:"Barwaha",c:"Diabetes + Hypertension",bp:"178/104",sg:210,off:16,ph:"+91 98230 55123",ch:"WhatsApp",consent:false},
+  {n:"Kamala Bai",v:"Kondwadi",c:"Diabetes + Hypertension",bp:"152/96",sg:190,off:4,ph:"+91 93321 66104",ch:"SMS",consent:true},
+  {n:"Asha Singh",v:"Chhapra",c:"Hypertension",bp:"148/92",off:2,ph:"+91 97012 34567",ch:"Call",consent:false},
+  {n:"Ramesh Yadav",v:"Naya Bazar",c:"Type 2 Diabetes",sg:168,off:-3,ph:"+91 90118 77220",ch:"WhatsApp",consent:true,sent:true},
+  {n:"Priya Kumari",v:"Bishanpur",c:"Type 2 Diabetes",sg:142,off:0,ph:"+91 90090 12345",ch:"WhatsApp",consent:true},
+  {n:"Savitri Devi",v:"Barwaha",c:"Hypertension",bp:"128/82",off:-18,ph:"+91 94250 11890",ch:"SMS",consent:true},
+  {n:"Mohan Lal",v:"Chhapra",c:"Type 2 Diabetes",sg:118,off:-25,ph:"+91 98270 40021",ch:"SMS",consent:true}
+];
+const status = o => o>=7?"esc":o>=1?"over":o>=-7?"soon":"ok";
+const LABEL = {esc:"Escalated",over:"Overdue",soon:"Due Soon",ok:"On Track"};
+const fmt = off => new Date(today.getTime()-off*DAY).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+const dueText = o => o>0?`${o} day${o>1?"s":""} overdue`:o===0?"Due today":`Due in ${-o} day${o<-1?"s":""}`;
+const msgFor = p => `Hello ${p.n}, this is a reminder from your health worker that your follow-up visit is on ${fmt(p.off)}. Please visit ${PHC}. — ${ASHA}`;
+const count = s => patients.filter(p=>status(p.off)===s).length;
+const queue = () => patients.filter(p=>p.off>=-3&&p.consent&&p.ch!=="Call");
+const queued = () => queue().filter(p=>!p.sent).length;
+const plural = (n,w) => `${n} ${w}${n===1?"":"s"}`;
+const digestText = () => `Good morning ${ASHA}. Today: ${plural(patients.filter(p=>p.off===0).length,"patient")} due, ${count("over")} overdue, ${count("esc")} escalated. Open Saathi app for details.`;
+
+let view="home", filter="all", rtab="queue", q="";
+
+const ICON = {
+  home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  bell:'<path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+  chart:'<path d="M5 20V10M12 20V4M19 20v-7"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>'
+};
+function nav(){
+  const items=[["home","Home","home"],["reminders","Reminders","bell"],["phc","PHC","chart"],["add","Add","plus"]];
+  document.getElementById("nav").innerHTML=items.map(([k,l,i])=>
+    `<button data-go="${k}" class="${view===k?"on":""}" aria-label="${l}"><svg viewBox="0 0 24 24">${ICON[i]}</svg>${l}${k==="reminders"&&queued()?`<span class="dot">${queued()}</span>`:""}</button>`).join("");
+}
+function toast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("show"),2200)}
+
+function listHTML(){
+  const rows=patients.filter(p=>(filter==="all"||status(p.off)===filter)&&(p.n+" "+p.v).toLowerCase().includes(q.toLowerCase()))
+    .sort((a,b)=>b.off-a.off);
+  if(!rows.length) return `<div class="card"><b>No patients match.</b><div class="meta" style="margin-top:4px">Clear the search or pick another filter.</div></div>`;
+  return rows.map(p=>{const s=status(p.off);
+    const vit=[p.bp&&`BP ${p.bp}`,p.sg&&`Sugar ${p.sg}`].filter(Boolean).join(" · ");
+    return `<div class="card"><div class="prow"><div class="av ${s}">${p.n[0]}</div><div class="pinfo"><b>${p.n}</b><span>${p.v} · ${p.c}</span><span>${vit?vit+" · ":""}<em>${dueText(p.off)}</em></span></div><span class="badge ${s}">${LABEL[s]}</span></div></div>`}).join("");
+}
+function homeHTML(){
+  const due=patients.filter(p=>p.off===0).length, chase=count("over")+count("esc");
+  const f=[["all",`All · ${patients.length}`],["esc",`Escalated · ${count("esc")}`],["over",`Overdue · ${count("over")}`],["soon",`Due Soon · ${count("soon")}`],["ok",`On Track · ${count("ok")}`]];
+  return `<div class="hero"><div class="top"><span>Today · ${today.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}</span><span>${PHC}</span></div>
+  <h3>${due} due today, ${chase} need chasing</h3>
+  <div class="counts"><div><b>${due}</b><small>Due today</small></div><div><b>${count("over")}</b><small>Overdue</small></div><div><b>${count("esc")}</b><small>Escalated</small></div></div>
+  <div class="digest">${digestText()}</div><button class="btn light" data-go="reminders">Open reminder queue</button></div>
+  <input class="search" id="search" placeholder="Search patient or village" value="${q}" aria-label="Search patient or village">
+  <div class="chips">${f.map(([k,l])=>`<button class="chip ${filter===k?"on":""}" data-filter="${k}">${l}</button>`).join("")}</div>
+  <div id="list">${listHTML()}</div>`;
+}
+function remindersHTML(){
+  const tabs=`<div class="tabs"><button class="tab ${rtab==="queue"?"on":""}" data-rtab="queue">Queue · ${queued()}</button><button class="tab ${rtab==="digest"?"on":""}" data-rtab="digest">My Digest</button></div>`;
+  const head=`<h2>Reminders</h2><p class="sub">Auto-generated for patients due within 3 days. Delivery is mocked until a messaging API is connected.</p>`;
+  if(rtab==="digest") return head+tabs+`<div class="card"><div class="lbl">Morning SMS to ${ASHA}</div><div class="msg">${digestText()}</div><div class="meta">Sent daily at 7:00 AM to +91 98765 43210 using the same messaging integration as patient reminders.</div></div>
+  <div class="card"><div class="lbl">Message template</div><div class="msg">${msgFor(patients[5])}</div></div>
+  <div class="alert"><b>${plural(count("esc"),"patient")} need${count("esc")===1?"s":""} urgent follow-up</b><span>Escalated after 7 days overdue with no visit logged. Visible to your PHC supervisor.</span></div>`;
+  const qs=queue();
+  return head+tabs+`<div class="card"><div class="meta" style="font-size:14px">${plural(qs.length,"patient")} need a reminder and have messaging consent.</div><div class="split"><button class="btn ghost" data-act="refresh">Refresh queue</button><button class="btn solid" data-act="sendall">Send all queued</button></div></div>`+
+  qs.map((p,i)=>`<div class="card"><div class="qhead"><b>${p.n}</b><span class="tag ${p.sent?"d":"q"}">${p.sent?"Delivered":"Queued"}</span></div><div class="meta">${p.ch} · ${p.ph}</div><div class="msg">${msgFor(p)}</div><div class="qfoot"><span class="meta">Queued ${fmt(0)} · attempt ${p.sent?1:0}</span>${p.sent?"":`<button class="btn solid sm" data-send="${patients.indexOf(p)}">Send now</button>`}</div></div>`).join("");
+}
+function phcHTML(){
+  const me={name:ASHA,n:patients.length,ok:count("ok"),soon:count("soon"),over:count("over"),esc:count("esc")};
+  const team=[me,{name:"Sunita Kale",n:3,ok:1,soon:1,over:0,esc:1},{name:"Rekha Patil",n:3,ok:1,soon:0,over:1,esc:1}];
+  const total=team.reduce((a,t)=>a+t.n,0)+6, urgent=team.reduce((a,t)=>a+t.esc,0);
+  return `<h2>PHC overview</h2><p class="sub">${PHC} · 3 ASHA workers · ${total} patients</p><div class="alert" style="padding:12px 14px"><b>${urgent} patients need urgent follow-up</b></div>`+
+  team.map((t,i)=>{const r=Math.round((t.ok+t.soon)/t.n*100);
+    return `<div class="card acard"><div class="qhead"><div><h3>${t.name}</h3><span class="meta">${t.n} patients assigned</span></div><div class="rate">${r}%<small>on-time rate</small></div></div>
+    <div class="bar"><i style="width:${r}%"></i></div>
+    <div class="stats"><div class="ok"><b>${t.ok}</b><small>On track</small></div><div class="soon"><b>${t.soon}</b><small>Due soon</small></div><div class="over"><b>${t.over}</b><small>Overdue</small></div><div class="esc"><b>${t.esc}</b><small>Escalated</small></div></div>
+    <button class="btn ghost" data-pview="${i}">View patients</button></div>`}).join("");
+}
+function addHTML(){
+  const d=new Date(today.getTime()+30*DAY).toISOString().slice(0,10);
+  const grp=(g,items,cols)=>`<div class="opts" style="grid-template-columns:repeat(${cols},1fr)">${items.map((x,i)=>`<button type="button" class="opt ${i===0?"on":""}" data-grp="${g}">${x}</button>`).join("")}</div>`;
+  return `<h2>New patient</h2><p class="sub">Only name and village are required. Everything else can be filled in later.</p>
+  <div class="card" style="padding:4px 16px 16px">
+  <label class="f" for="fn">Full name</label><input class="in" id="fn">
+  <div class="two"><div><label class="f" for="fa">Age</label><input class="in" id="fa" inputmode="numeric"></div><div><label class="f" for="fv">Village</label><input class="in" id="fv"></div></div>
+  <label class="f">Gender</label>${grp("gender",["Female","Male","Other"],3)}
+  <label class="f">Condition</label>${grp("cond",["BP","Sugar","Both"],3)}
+  <label class="f" for="fp">Contact number</label><input class="in" id="fp" placeholder="+91" inputmode="tel">
+  <label class="f">Whose phone</label>${grp("whose",["Patient's own","Family member"],2)}
+  <label class="f">Preferred channel</label>${grp("chan",["SMS","WhatsApp","Call"],3)}
+  <label class="f" for="fw">Assigned ASHA worker</label><select class="in" id="fw"><option>${ASHA}</option><option>Sunita Kale</option><option>Rekha Patil</option></select>
+  <label class="f" for="fd">First follow-up (30 days suggested)</label><input class="in" type="date" id="fd" value="${d}">
+  <label class="consent"><input type="checkbox" id="fc" checked> Patient or family agreed to receive health reminders by SMS / WhatsApp.</label>
+  <button class="btn solid" data-act="save">Save patient</button></div>`;
+}
+function render(){
+  const app=document.getElementById("app");
+  app.innerHTML={home:homeHTML,reminders:remindersHTML,phc:phcHTML,add:addHTML}[view]();
+  nav(); window.scrollTo(0,0);
+}
+function savePatient(){
+  const v=id=>document.getElementById(id).value.trim();
+  const pick=g=>document.querySelector(`[data-grp="${g}"].on`).textContent;
+  if(!v("fn")||!v("fv")){toast("Enter the patient's name and village.");return}
+  const cond=pick("cond"), days=Math.round((new Date(v("fd")||0)-today)/DAY);
+  patients.push({n:v("fn"),v:v("fv"),c:{BP:"Hypertension",Sugar:"Diabetes",Both:"Diabetes + Hypertension"}[cond],
+    off:-(isNaN(days)?30:days),ph:v("fp")||"—",ch:pick("chan"),consent:document.getElementById("fc").checked});
+  toast(`${v("fn")} added.`); view="home"; filter="all"; q=""; render();
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button"); if(!t) return;
+  if(t.dataset.go){view=t.dataset.go;render()}
+  else if(t.dataset.filter){filter=t.dataset.filter;render()}
+  else if(t.dataset.rtab){rtab=t.dataset.rtab;render()}
+  else if(t.dataset.send){patients[+t.dataset.send].sent=true;toast("Reminder sent (mock).");render()}
+  else if(t.dataset.grp){document.querySelectorAll(`[data-grp="${t.dataset.grp}"]`).forEach(b=>b.classList.remove("on"));t.classList.add("on")}
+  else if(t.dataset.pview){if(t.dataset.pview==="0"){view="home";render()}else toast("Demo data: only Laxmi Devi's list is loaded.")}
+  else if(t.dataset.act==="refresh"){toast("Queue refreshed.");render()}
+  else if(t.dataset.act==="sendall"){const n=queued();queue().forEach(p=>p.sent=true);toast(n?`${plural(n,"reminder")} sent (mock).`:"Nothing left to send.");render()}
+  else if(t.dataset.act==="save"){savePatient()}
+});
+document.addEventListener("input",e=>{if(e.target.id==="search"){q=e.target.value;document.getElementById("list").innerHTML=listHTML()}});
+render();
+</script>
+</body>
+</html>
